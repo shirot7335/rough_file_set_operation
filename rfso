@@ -1,0 +1,95 @@
+#!/bin/bash
+
+readonly CMDNAME="$(basename $0)"
+
+MODE="difference"
+FILEPATH_A="${1}"
+FILEPATH_B="${2}"
+
+usage_exit() {
+    cat <<HELP 1>&2
+Usage: ${CMDNAME} [OPTION]...
+[OPTION]
+    -m=<"difference" or "intersection">
+    -a=<left side of set operation filepath>
+    -b=<right side of set operation filepath>
+    -h show this message
+HELP
+
+    exit 1
+}
+
+#ERROR Message{{{
+error__file_is_not_exists() {
+    filepath="${1}"
+
+    echo "${filepath} is not exists." 1>&2
+    exit 1
+}
+#}}}
+
+# Set operations {{{
+non_duplicate_array__intersection() {
+    non_duplicate_array_a="${1}"
+    non_duplicate_array_b="${2}"
+
+    printf "%s\n" $(echo "${non_duplicate_array_a[@]}" "${non_duplicate_array_b[@]}") | sort | uniq -d
+}
+
+non_duplicate_array__difference() {
+    non_duplicate_array_a="${1}"
+    non_duplicate_array_b="${2}"
+
+    intersection_array="$(non_duplicate_array__intersection "${non_duplicate_array_a}" "${non_duplicate_array_b}")"
+
+    printf "%s\n" $(echo "${non_duplicate_array_a[@]}" "${intersection_array[@]}") | sort | uniq -u
+}
+#}}}
+
+main() {
+    filepath_a="${1}"
+    filepath_b="${2}"
+    mode="${3}"
+
+    non_duplicate_array_a=($(cat "${filepath_a}" | sort | uniq))
+    non_duplicate_array_b=($(cat "${filepath_b}" | sort | uniq))
+
+    eval "non_duplicate_array__${mode} "${non_duplicate_array_a}" "${non_duplicate_array_b}""
+}
+
+while getopts m:a:b:h OPTION
+do
+    case $OPTION in
+        m)
+            MODE="${OPTARG}"
+            ;;
+        a)
+            FILEPATH_A="${OPTARG}"
+            ;;
+        b)
+            FILEPATH_B="${OPTARG}"
+            ;;
+        h)
+            usage_exit
+            ;;
+    esac
+done
+
+case "${MODE}" in
+    'difference') ;;
+    'intersection') ;;
+    *) usage_exit ;;
+esac
+
+if   [ ! -e "${FILEPATH_A}" ]; then
+    error__file_is_not_exists "${FILEPATH_A}"
+elif [ ! -e "${FILEPATH_B}" ]; then
+    error__file_is_not_exists "${FILEPATH_B}"
+fi
+
+if [[ "${BASH_SOURCE[0]}" == "${0}"  ]]; then
+  main "${FILEPATH_A}" "${FILEPATH_B}" "${MODE}"
+fi
+
+
+exit 0
