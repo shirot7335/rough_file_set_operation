@@ -54,6 +54,13 @@ eeeeee
 ffffff
 ```
 
+* sample_c.txt
+```
+bbbbbb
+cccccc
+gggggg
+```
+
 ### Command
 #### Intersection
 ```bash
@@ -85,4 +92,29 @@ $ rfso -m 'difference' -a sample_b.txt -b sample_a.txt
 # ffffff
 ```
 
+#### Pipe mode
+```bash
+$ rfso -m 'difference' -a sample_a.txt -b sample_b.txt | rfso -m 'intersection' -a ':stdin' -b sample_c.txt
 
+#bbbbbb
+#cccccc
+```
+
+```bash
+$ rfso -m 'difference' -a sample_a.txt -b sample_b.txt | rfso -m 'difference' -a ':stdin' -b sample_c.txt
+
+#dddddd
+```
+
+```bash
+$ rfso -m 'difference' -a sample_a.txt -b sample_b.txt | rfso -m 'intersection' -a sample_c.txt -b ':stdin'
+
+#bbbbbb
+#cccccc
+```
+
+```bash
+$ rfso -m 'difference' -a sample_a.txt -b sample_b.txt | rfso -m 'difference' -a sample_c.txt -b ':stdin'
+
+#gggggg
+```
