@@ -3,6 +3,7 @@
 ## Description
 This script performs set operations on two files passed as arguments.
 The lines in each file are used as elements of the set.
+Duplicate items will be deleted in the output.
 
 rough_file_set_operation is installed as a `rfso` command.
 
