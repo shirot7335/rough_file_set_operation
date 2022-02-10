@@ -63,6 +63,18 @@ gggggg
 ```
 
 ### Command
+#### Union
+```bash
+$ rfso -m 'union' -a sample_a.txt -b sample_b.txt
+
+#aaaaaa
+#bbbbbb
+#cccccc
+#dddddd
+#eeeeee
+#ffffff
+```
+
 #### Intersection
 ```bash
 $ rfso -m 'intersection' -a sample_a.txt -b sample_b.txt

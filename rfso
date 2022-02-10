@@ -35,7 +35,7 @@ Usage: ${CMDNAME} [OPTION]...
 
 [OPTION]
     -m <mode>
-         Specifies the mode of set operation. <"difference" or "intersection">
+         Specifies the mode of set operation. <"union" or "intersection" or "difference">
     -a <filepath> or ':stdin'
          Specifies the file path. Left side of set operation.
          If ':stdin' is specified, the value of the standard input will be reflected.
@@ -59,6 +59,14 @@ error__file_is_not_exists() {
 #}}}
 
 # Set operations {{{
+non_duplicate_array__union() {
+    non_duplicate_array_a="${1}"
+    non_duplicate_array_b="${2}"
+
+    printf "%s\n" $(echo "${non_duplicate_array_a[@]}" "${non_duplicate_array_b[@]}") | sort | uniq
+}
+
+
 non_duplicate_array__intersection() {
     non_duplicate_array_a="${1}"
     non_duplicate_array_b="${2}"
@@ -108,6 +116,7 @@ done
 case "${MODE}" in
     'difference') ;;
     'intersection') ;;
+    'union') ;;
     *) usage_exit ;;
 esac
 
