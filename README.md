@@ -18,11 +18,18 @@ make
 
 ```
 Usage: rfso [OPTION]...
+
 [OPTION]
-    -m <mode>        Specifies the mode of set operation. <"difference" or "intersection">
-    -a <filepath>    Specifies the file path. Left side of set operation.
-    -b <filepath>    Specifies the file path. Right side of set operation.
-    -h               Show this message
+    -m <mode>
+         Specifies the mode of set operation. <"difference" or "intersection">
+    -a <filepath> or ':stdin'
+         Specifies the file path. Left side of set operation.
+         If ':stdin' is specified, the value of the standard input will be reflected.
+    -b <filepath> or ':stdin'
+         Specifies the file path. Right side of set operation.
+         If ':stdin' is specified, the value of the standard input will be reflected.
+    -h
+         Show this message
 ```
 
 ## Example

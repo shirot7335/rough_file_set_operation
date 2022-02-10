@@ -25,18 +25,25 @@
 
 readonly CMDNAME="$(basename $0)"
 
-MODE="difference"
+MODE=""
 FILEPATH_A="${1}"
 FILEPATH_B="${2}"
 
 usage_exit() {
     cat <<HELP 1>&2
 Usage: ${CMDNAME} [OPTION]...
+
 [OPTION]
-    -m=<"difference" or "intersection">
-    -a=<left side of set operation filepath>
-    -b=<right side of set operation filepath>
-    -h show this message
+    -m <mode>
+         Specifies the mode of set operation. <"difference" or "intersection">
+    -a <filepath> or ':stdin'
+         Specifies the file path. Left side of set operation.
+         If ':stdin' is specified, the value of the standard input will be reflected.
+    -b <filepath> or ':stdin'
+         Specifies the file path. Right side of set operation.
+         If ':stdin' is specified, the value of the standard input will be reflected.
+    -h
+         Show this message
 HELP
 
     exit 1
@@ -70,8 +77,8 @@ non_duplicate_array__difference() {
 #}}}
 
 main() {
-    filepath_a="${1}"
-    filepath_b="${2}"
+    filepath_a="$([[ "${1}" == ':stdin' ]] && echo '-' || echo "${1}")"
+    filepath_b="$([[ "${2}" == ':stdin' ]] && echo '-' || echo "${2}")"
     mode="${3}"
 
     non_duplicate_array_a=($(cat "${filepath_a}" | sort | uniq))
@@ -104,9 +111,9 @@ case "${MODE}" in
     *) usage_exit ;;
 esac
 
-if   [ ! -e "${FILEPATH_A}" ]; then
+if   [ ! -e "${FILEPATH_A}" ] && [ ! "${FILEPATH_A}" = ':stdin' ]; then
     error__file_is_not_exists "${FILEPATH_A}"
-elif [ ! -e "${FILEPATH_B}" ]; then
+elif [ ! -e "${FILEPATH_B}" ] && [ ! "${FILEPATH_B}" = ':stdin' ]; then
     error__file_is_not_exists "${FILEPATH_B}"
 fi
 
